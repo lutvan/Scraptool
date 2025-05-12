@@ -7,8 +7,14 @@ Scraptool adalah sebuah tool yang berfungsi untuk melakukan scraping atau pengam
 ## Cara Penggunaan
 install library 
 1. install library beautifulsoup
-2. install library pandas
-3. install library selenium
+   ```bash
+   pip install beautifulsoup4
+3. install library pandas
+   ```bash
+   pip install pandas
+5. install library selenium
+   ```bash
+   pip install selenium
 ⚠️Disarankan untuk menginstal library pyfiglet
 
 install chromedriver (sesuaikan dengan versi chrome kalian)
