@@ -17,6 +17,6 @@ install library
       ```bash
       pip install selenium
 ⚠ Disarankan untuk menginstal library colorama agar saat code dijalankan tidak error.
-      ```bash
+   ```bash
       pip install colorama
    
