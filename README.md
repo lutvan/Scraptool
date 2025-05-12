@@ -4,7 +4,7 @@ Scraptool adalah sebuah tool yang berfungsi untuk melakukan scraping atau pengam
 ## Cara Penggunaan
 #### Install chromedriver
    sesuaikan chromedriver dengan versi chrome kalian.
-   jika anda menggunakan chrome versi 136.0.7103.93 maka anda tidak perlu menginstal chromedriver kembali.
+   Jika anda menggunakan chrome versi 136.0.7103.93 maka anda tidak perlu menginstal chromedriver kembali.
 
 #### install library 
    1. install library beautifulsoup
