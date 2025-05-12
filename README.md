@@ -2,11 +2,11 @@
 Scraptool adalah sebuah tool yang berfungsi untuk melakukan scraping atau pengambilan data berupa konten pada sebuah website yang dibuat menggunakan bahasa pemrograman python dengan bantuan library beautifulsoup, pandas dan selenium.
 
 ## Cara Penggunaan
-Install chromedriver
+##### Install chromedriver
    sesuaikan chromedriver dengan versi chrome kalian.
    jika anda menggunakan chrome versi 136.0.7103.93 maka anda tidak perlu menginstal chromedriver kembali.
 
-install library 
+##### install library 
    1. install library beautifulsoup
       ```bash
       pip install beautifulsoup4
