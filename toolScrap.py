@@ -25,19 +25,16 @@ while True:
 
     ''' + Fore.CYAN + Style.BRIGHT + '===========================================')
 
-    # input URL
     print("\nInputkan dengan CTRL + SHIFT + V\n")
 
     input_url = input("Masukan URL : ")
     element_pembungkus = input("Masukan element pembungkus yang akan discrap : ")
     class_pembungkus = input("Masukan class pembungkus yang akan discrap : ")
 
-    # jumlah scroll
     print("\nJumlah scroll screen pada web : \n")
 
     count_scroll = int(input("Masukan jumlah scroll screen : "))
 
-    # jumlah kolom dan input informasi tiap kolom
     jumlah_kolom = int(input("Masukan jumlah kolom row untuk tabel pada excel : ")) 
 
     kolom_info = []
@@ -52,7 +49,7 @@ while True:
             "kelas": kelas,
         })
 
-    # Setting
+    # Settingan
     opsi = webdriver.ChromeOptions()
     opsi.add_argument('--ignore-certificate-errors')
     opsi.add_argument('--ignore-ssl-errors')
@@ -64,7 +61,7 @@ while True:
     servis = Service("Chromedriver/chromedriver.exe")
     driver = webdriver.Chrome(service=servis, options=opsi)
 
-    # membuka halaman dan scroll
+    
     driver.get(input_url)
     width_screen = 700
     for i in range(1, count_scroll):
@@ -76,11 +73,10 @@ while True:
     print("Wait for the process....")
     time.sleep(5)
 
-    # mulai scraping
+    # scraping
     content = driver.page_source
     soup = BeautifulSoup(content, 'html.parser')
 
-    # ambil data berdasarkan kolom
     data_rows = []
     count = 1
     for area in soup.find_all(element_pembungkus, class_=class_pembungkus):
@@ -94,7 +90,7 @@ while True:
 
     driver.quit()
 
-    # convert ke DataFrame dan simpan jika diinginkan
+    
     input_save_file = input("Apakah anda ingin save file dalam bentuk Excel? (y/n) : ").lower()
     if input_save_file == 'y':
         input_name_file = input("Masukan nama file (.xlsx): ")
