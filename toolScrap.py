@@ -5,7 +5,6 @@ from bs4 import BeautifulSoup
 import pandas as pd
 import time
 
-
 print(Fore.CYAN + Style.BRIGHT + ''' 
                                                                                      __
                                                                                     / /
@@ -25,16 +24,30 @@ print(Fore.CYAN + Style.BRIGHT + '''
 
 # input URL
 print("\nInputkan dengan CTRL + SHIFT + V\n")
-input_url = input("Masukan URL : ")
-input_element1 = input("Masukan element pembungkus yang akan discrap : ")
-input_class1 = input("Masukan class pembungkus yang akan discrap : ")
 
-# memasukan target element yang akan discrap
-print("==============================")
-input_element2 = input("Masukan target element yang akan discrap : ")
-input_class2 = input("Masukan target class dari element yang akan discrap : ")
+input_url = input("Masukan URL : ")
+element_pembungkus = input("Masukan element pembungkus yang akan discrap : ")
+class_pembungkus = input("Masukan class pembungkus yang akan discrap : ")
+
+# jumlah scroll
 print("\nJumlah scroll screen pada web : \n")
+
 count_scroll = int(input("Masukan jumlah scroll screen : "))
+
+# jumlah kolom dan input informasi tiap kolom
+jumlah_kolom = int(input("Masukan jumlah kolom row untuk tabel pada excel : ")) 
+
+kolom_info = []
+for i in range(jumlah_kolom):
+    print(f"\n== Kolom ke-{i+1} ==")
+    nama_kolom = input("Masukan nama kolom : ")
+    elemen = input("Masukan nama elemen HTML target : ")
+    kelas = input("Masukan nama class dari elemen target : ")
+    kolom_info.append({
+        "nama": nama_kolom,
+        "elemen": elemen,
+        "kelas": kelas,
+    })
 
 # Setting
 opsi = webdriver.ChromeOptions()
@@ -48,40 +61,40 @@ opsi.add_argument('--headless=new')
 servis = Service("Chromedriver/chromedriver.exe")
 driver = webdriver.Chrome(service=servis, options=opsi)
 
-
-
-# grep structure
+# membuka halaman dan scroll
 driver.get(input_url)
-# scroll
 width_screen = 700
-for i in range(1,count_scroll):
+for i in range(1, count_scroll):
     akhir = width_screen * i
-    script = "window.scrollTo(0, "+str(akhir)+")"
+    script = f"window.scrollTo(0, {akhir})"
     driver.execute_script(script)
     print("Loading scroll screen ", i)
     time.sleep(1)
 print("Wait for the process....")
-
-
 time.sleep(5)
+
+# mulai scraping
 content = driver.page_source
-data = BeautifulSoup(content, 'html.parser')
+soup = BeautifulSoup(content, 'html.parser')
 
-
-list_heading = []
-
+# ambil data berdasarkan kolom
+data_rows = []
 count = 1
-for area in data.find_all(input_element1, class_=input_class1):
-    print("data ke ", count)
-    heading = area.find(input_element2, class_=input_class2).get_text()
-    list_heading.append(heading)
+for area in soup.find_all(element_pembungkus, class_=class_pembungkus):
+    row = {}
+    print("Data ke", count)
+    for kolom in kolom_info:
+        target = area.find(kolom['elemen'], class_=kolom['kelas'])
+        row[kolom['nama']] = target.get_text(strip=True) if target else ''
+    data_rows.append(row)
     count += 1
 
 driver.quit()
 
+# convert ke DataFrame dan simpan jika diinginkan
 input_save_file = input("Apakah anda ingin save file dalam bentuk Excel? (y/n) : ").lower()
 if input_save_file == 'y':
-    input_name_column = input("Masukan nama kolom : ")
     input_name_file = input("Masukan nama file (.xlsx): ")
-    dataF = pd.DataFrame({input_name_column: list_heading})
-    dataF.to_excel(input_name_file, index=False, sheet_name='Sheet1')
+    df = pd.DataFrame(data_rows)
+    df.to_excel(input_name_file, index=False, sheet_name='Sheet1')
+    print(f"Data berhasil disimpan ke {input_name_file}")
